@@ -10,14 +10,14 @@ namespace Tempo
     {
         public double GetPower(int input)
         {
-            double[,] X = new double[4, 21]; //temperatura
-            double[,] Y = new double[4, 21]; //moc pieca
+            double[,] X = new double[4, 41]; //temperatura
+            double[,] Y = new double[4, 41]; //moc pieca
 
             int Arraylength = X.GetLength(1);
 
-            double[,] wnioskowanie_Y = new double[4, 21];
+            double[,] wnioskowanie_Y = new double[4, 41];
 
-            double[,] agregacja_Y = new double[2, 21];
+            double[,] agregacja_Y = new double[2, 41];
 
             double uA, uB, uC, uD, uE, uF;
             double a, x0, x1, x2, b, x;
@@ -43,7 +43,7 @@ namespace Tempo
 
             for (int i = 0; i < Arraylength; i++)
             {
-                x = i + 10;
+                x = (i * 0.5) + 10;
                 X[0, i] = x;
 
                 //trójkąt uA - temperatura niska
@@ -126,12 +126,12 @@ namespace Tempo
 
             for (int i = 0; i < Arraylength; i++)
             {
-                x = i * 5;
+                x = (i * 4.5) - 40;
                 Y[0, i] = x;
 
                 //trapez uD - moc pieca niska
-                a = 0;
-                x1 = 0;
+                a = -40;
+                x1 = -20;
                 x2 = 20;
                 b = 40;
 
@@ -181,8 +181,8 @@ namespace Tempo
                 //trapez uF - moc pieca wysoka
                 a = 60;
                 x1 = 80;
-                x2 = 100;
-                b = 100;
+                x2 = 120;
+                b = 140;
 
                 if (a <= x && x <= x1)
                 {
@@ -233,8 +233,8 @@ namespace Tempo
 
             for (int i = 0; i < Arraylength; i++)
             {
-                wnioskowanie_Y[0, i] = i*5;
-                agregacja_Y[0, i] = i*5;
+                wnioskowanie_Y[0, i] = (i * 4.5) - 40;
+                agregacja_Y[0, i] = (i * 4.5) - 40;
 
                 if (Y[3, i] > roz_uA) //uF do uA
                 {
