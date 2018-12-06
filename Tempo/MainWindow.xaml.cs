@@ -36,7 +36,7 @@ namespace Tempo
         {
             //var lblText = weatherData.GetTemp();
             //TemperatureLbl.Content = lblText;
-            temp.ReadText(0);
+            temp.ReadText();
             temp.ParseTemperature();
             //foreach (var item in temp.Temperatures)
             //{
@@ -53,7 +53,7 @@ namespace Tempo
         {
             if(counter<temp.Temperatures.Count)
             {
-                TemperatureLbl.Content = "Temperature outside " + (counter+1) + ": " + temp.Temperatures[counter] + " ºC";
+                //TemperatureLbl.Content = "Temperature outside " + (counter+1) + ": " + temp.Temperatures[counter] + " ºC";
                 counter++;
             }
             else

@@ -29,8 +29,7 @@ namespace Tempo
         /// <summary>
         /// Reads data from text file
         /// </summary>
-        /// <param name="miliSeconds">delay</param>
-        public void ReadText(int miliSeconds)
+        public void ReadText()
         {
             var lines = File.ReadAllLines(path);
 
@@ -41,7 +40,6 @@ namespace Tempo
                     temperatures.Add(lines[i]);
                     continue;
                 }
-                Thread.Sleep(miliSeconds);
                 temperatures.Add(lines[i]);
             }
         }
