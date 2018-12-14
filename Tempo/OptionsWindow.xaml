@@ -46,6 +46,7 @@
         <Button Grid.Row="3"
                 Grid.Column="2"
                 Content="Ustaw"
-                FontSize="24"/>
+                FontSize="24"
+                Click="Button_Click"/>
     </Grid>
 </Window>

@@ -19,9 +19,53 @@ namespace Tempo
     /// </summary>
     public partial class OptionsWindow : Window
     {
+        public string InputMode { get; set; }
+        public int Interval { get; set; }
+
         public OptionsWindow()
         {
             InitializeComponent();
+            AutoInput.IsChecked = true;
+            CheckMode();
+        }
+
+        // TODO: Add check event
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            #region Input type check
+            CheckMode();
+            #endregion
+
+            #region Get interval length if manual
+            if (InputMode == "Manual")
+            {
+                try
+                {
+                    Interval = int.Parse(IntervalLength.Text);
+                }
+                catch (Exception ex)
+                {
+                    IntervalLength.Text = "Podaj prawidłową wartość!";
+                }
+            }
+            else
+                IntervalLength.IsEnabled = false;
+            #endregion
+
+            this.Hide();
+        }
+
+        private void CheckMode()
+        {
+            if (ManualInput.IsChecked == true)
+            {
+                InputMode = "Manual";
+            }
+            else
+            {
+                InputMode = "Auto";
+            }
         }
     }
 }

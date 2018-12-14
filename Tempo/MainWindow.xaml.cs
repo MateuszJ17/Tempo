@@ -49,9 +49,23 @@ namespace Tempo
         {
             //foreach (var item in temp.ParsedTemperatures)
             //{
-            //    InsideTemperatureLabelValue.Content = item.ToString();
+            //    OutsideTemperatureLabelValue.Content = item.ToString();
             //}
             InsideTemperatureLabelValue.Content = DateTime.Now.ToLongTimeString();
+        }
+
+        private void OptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow optionsWindow = new OptionsWindow();
+            optionsWindow.ShowDialog();
+            if (!optionsWindow.IsVisible)
+            {
+                optionsWindow.Show();
+                optionsWindow.Activate();
+                optionsWindow.Focus();
+            }
+            else
+                optionsWindow.Activate();
         }
     }
 }
