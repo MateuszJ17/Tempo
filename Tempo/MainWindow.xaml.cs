@@ -25,41 +25,33 @@ namespace Tempo
         Temperature temp = new Temperature();
         WeatherData weatherData = new WeatherData();
         DispatcherTimer dt = new DispatcherTimer();
-        int counter;
+        int counter = 1;
 
         public MainWindow()
         {
             InitializeComponent();
+            temp.ReadText();
+            temp.ParseTemperature();
         }
 
         private void WeatherBtn_Click(object sender, RoutedEventArgs e)
         {
-            //var lblText = weatherData.GetTemp();
-            //TemperatureLbl.Content = lblText;
-            temp.ReadText();
-            temp.ParseTemperature();
-            //foreach (var item in temp.Temperatures)
-            //{
-            //    Console.WriteLine(item);
-            //}
-
-            counter = 0;
-            dt.Interval = TimeSpan.FromMilliseconds(1000);
-            dt.Tick += Dt_Tick;
-            dt.Start();
+            InsideTemperatureLabelValue.Dispatcher.Invoke(new Action(() => 
+            {
+                dt.Interval = TimeSpan.FromSeconds(1);
+                dt.Tick += Dt_Tick;
+                dt.Start();
+            })
+            );
         }
 
         private void Dt_Tick(object sender, EventArgs e)
         {
-            if(counter<temp.Temperatures.Count)
-            {
-                //TemperatureLbl.Content = "Temperature outside " + (counter+1) + ": " + temp.Temperatures[counter] + " ºC";
-                counter++;
-            }
-            else
-            {
-                dt.Stop();
-            }
+            //foreach (var item in temp.ParsedTemperatures)
+            //{
+            //    InsideTemperatureLabelValue.Content = item.ToString();
+            //}
+            InsideTemperatureLabelValue.Content = DateTime.Now.ToLongTimeString();
         }
     }
 }
