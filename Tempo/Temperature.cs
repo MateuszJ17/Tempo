@@ -16,6 +16,7 @@ namespace Tempo
 
         public List<string> Temperatures { get => temperatures; set => temperatures = value; }
         public List<double> ParsedTemperatures { get => parsedTemperatures; set => parsedTemperatures = value; }
+        public double tempLoss;
 
         /// <summary>
         /// Default constructor
@@ -57,6 +58,16 @@ namespace Tempo
                 singleTemp = double.Parse(replacedItem);
                 parsedTemperatures.Add(singleTemp);
             }
+        }
+
+        public void GetTempLoss(double tempOutside, double tempInside)
+        {
+            tempLoss = tempOutside / 100;
+        }
+
+        public double CalculateHeatLoss(double tempInside)
+        {
+            return tempInside - tempLoss;
         }
 
     }
