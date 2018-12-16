@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tempo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Symulacja ogrzewania" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -31,39 +31,52 @@
                 Click="OptionsButton_Click"/>
 
         <Button x:Name="WeatherBtn"
-                Content="Get weather"
+                Content="Start"
                 FontSize="24"
                 Grid.Column="2"
                 Grid.Row="3"
                 Click="WeatherBtn_Click"/>
 
-         <!-- WARTOSCI TEMPERATUR -->
+        <!-- WARTOSCI TEMPERATUR -->
         <StackPanel Orientation="Vertical"
                     Grid.Column="2"
                     Grid.Row="1"
                     Grid.RowSpan="2">
-            <Label x:Name="InsideTemperatureLabel"
+
+            <Label x:Name="TimeLabel"
                    Grid.Column="2"
                    Grid.Row="1"
-                   Content="Wewnątrz"
+                   Content="Czas"
                    HorizontalAlignment="Center"/>
-            
-            <Label x:Name="InsideTemperatureLabelValue"
+
+            <Label x:Name="TimeLabelValue"
                    Grid.Column="2"
                    Grid.Row="1"
-                   Content="VALUE"
+                   Content="-"
                    HorizontalAlignment="Center"/>
 
             <Label x:Name="OutsideTemperatureLabel"
                    Grid.Column="2"
                    Grid.Row="1"
-                   Content="Na zewnątrz"
+                   Content="Temperatura na zewnątrz"
                    HorizontalAlignment="Center"/>
-            
+
             <Label x:Name="OutsideTemperatureLabelValue"
                    Grid.Column="2"
                    Grid.Row="1"
-                   Content="VALUE"
+                   Content="-"
+                   HorizontalAlignment="Center"/>
+
+            <Label x:Name="InsideTemperatureLabel"
+                   Grid.Column="2"
+                   Grid.Row="1"
+                   Content="Temperatura wewnątrz"
+                   HorizontalAlignment="Center"/>
+
+            <Label x:Name="InsideTemperatureLabelValue"
+                   Grid.Column="2"
+                   Grid.Row="1"
+                   Content="-"
                    HorizontalAlignment="Center"/>
         </StackPanel>
 
@@ -83,7 +96,8 @@
                      Orientation="Vertical"/>
         </Grid>
 
-        <!-- SLIDER DO TEMPERATURY (jesli ustawione w opcjach) -->
+        <!-- SLIDER DO TEMPERATURY (jesli ustawione w opcjach) MIN 15 - MAX 30 -->
+        <!-- DO TESTÓW JEST ZAKRES RÓŻNICY TEMP OD -15 do 15 W CELU SPRAWDZENIA FUZZY LOGIC-->
         <Grid Grid.RowSpan="3"
               Grid.Column="3"
               Grid.Row="1">
@@ -92,22 +106,61 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
             <Slider x:Name="TemperatureSlider"
                     Orientation="Vertical"
                     Grid.Column="1"
-                    HorizontalAlignment="Center"/>
+                    HorizontalAlignment="Center"
+                    Minimum="-15"
+                    Maximum="15"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"/>
         </Grid>
-        
+
         <Label x:Name="HeatingPowerLabel"
                 Grid.Row="4"
                 Grid.Column="1"
-               Content="Moc grzania"
-               HorizontalAlignment="Center"/>
+                Content="Moc grzania"
+                HorizontalAlignment="Center"/>
 
         <Label x:Name="TemperatureSliderLabel"
                 Grid.Row="4"
                 Grid.Column="3"
-               Content="Temperatura docelowa"
-               HorizontalAlignment="Center"/>
+                Content="Temperatura docelowa"
+                HorizontalAlignment="Center"/>
+
+        <Label x:Name="TargetTemperatureValue"
+               Content="VALUE"
+               Grid.Column="4"
+               HorizontalAlignment="Center"
+               Margin="0" 
+               Grid.Row="2"
+               VerticalAlignment="Center"
+               FontSize="36"/>
+
+        <Label x:Name="PowerValue"
+               Content="-"
+               HorizontalAlignment="Center"
+               Margin="0"
+               Grid.Row="2"
+               VerticalAlignment="Center"
+               FontSize="36"/>
+        
+        <Slider x:Name="SpeedSlider"
+                Grid.Column="2"
+                HorizontalAlignment="Left"
+                Margin="10,56,0,0"
+                VerticalAlignment="Top"
+                Width="139"
+                Minimum="10"
+                Maximum="1000"
+                IsSnapToTickEnabled="True"
+                IsDirectionReversed="True"/>
+        
+        <Label Content="Szybkość symulacji"
+               Grid.Column="2"
+               HorizontalAlignment="Center"
+               Margin="24,14,25,0"
+               VerticalAlignment="Top"/>
     </Grid>
 </Window>
