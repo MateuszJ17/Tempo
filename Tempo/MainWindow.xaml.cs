@@ -63,33 +63,23 @@ namespace Tempo
         private async void WeatherBtn_Click(object sender, RoutedEventArgs e)
         {
             await UpdateTimerAndTemp();
-            //InsideTemperatureLabelValue.Dispatcher.Invoke(new Action(() => 
-            //{
-            //    dt.Interval = TimeSpan.FromSeconds(1);
-            //    dt.Tick += Dt_Tick;
-            //    dt.Start();
-            //})
-            //);
         }
-
-        //private void Dt_Tick(object sender, EventArgs e)
-        //{
-        //    //foreach (var item in temp.ParsedTemperatures)
-        //    //{
-        //    //    OutsideTemperatureLabelValue.Content = item.ToString();
-        //    //}
-        //    TimeLabelValue.Content = DateTime.Now.ToLongTimeString();
-        //}
-
 
         private async Task UpdateTimerAndTemp()
         {
             string time = "";
             var temperatures = temp.ParsedTemperatures;
+            var initTemp = 21;
+            InsideTemperatureLabelValue.Content = initTemp;
 
             while (time != "23:59")
             {
                 OutsideTemperatureLabelValue.Content = temperatures[timer.Hour] + "°C";
+
+                double currentTemp = temperatures[timer.Hour];
+                var test = (double.Parse(InsideTemperatureLabelValue.Content.ToString()) - (currentTemp / 10)).ToString();
+
+                InsideTemperatureLabelValue.Content = test.ToString();
                 time = timer.ToString("HH:mm");
                 TimeLabelValue.Content = time;
                 await Task.Delay(speed);

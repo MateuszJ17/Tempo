@@ -60,15 +60,5 @@ namespace Tempo
             }
         }
 
-        public void GetTempLoss(double tempOutside, double tempInside)
-        {
-            tempLoss = tempOutside / 100;
-        }
-
-        public double CalculateHeatLoss(double tempInside)
-        {
-            return tempInside - tempLoss;
-        }
-
     }
 }
