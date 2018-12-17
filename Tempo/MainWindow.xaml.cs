@@ -31,7 +31,8 @@ namespace Tempo
 
         int speed = 1000;
         int targetTemp;
-        int counter = 1;
+        double insideTemp;
+        double outsideTemp;
         double power;
 
         public MainWindow()
@@ -55,9 +56,6 @@ namespace Tempo
         {
             TargetTemperatureValue.Content = TemperatureSlider.Value + "°C";
             targetTemp = int.Parse(TemperatureSlider.Value.ToString());
-            power = fuzzyLogic.GetPower(targetTemp);
-            PowerValue.Content = Math.Round(power).ToString() + "%";
-            HeatingPowerBar.Value = Math.Round(power);
         }
 
         private async void WeatherBtn_Click(object sender, RoutedEventArgs e)
@@ -67,25 +65,34 @@ namespace Tempo
 
         private async Task UpdateTimerAndTemp()
         {
+            WeatherBtn.IsEnabled = false;
             string time = "";
             var temperatures = temp.ParsedTemperatures;
-            var initTemp = 21;
-            InsideTemperatureLabelValue.Content = initTemp;
+            double initTemp = 21;
+            insideTemp = initTemp;
 
             while (time != "23:59")
             {
-                OutsideTemperatureLabelValue.Content = temperatures[timer.Hour] + "°C";
+                outsideTemp = temperatures[timer.Hour];
+                OutsideTemperatureLabelValue.Content = outsideTemp + "°C";
 
-                double currentTemp = temperatures[timer.Hour];
-                var test = (double.Parse(InsideTemperatureLabelValue.Content.ToString()) - (currentTemp / 10)).ToString();
+                if(insideTemp>15) insideTemp = Math.Round(insideTemp - (outsideTemp / 10), 2);
+                InsideTemperatureLabelValue.Content = insideTemp + "°C";
 
-                InsideTemperatureLabelValue.Content = test.ToString();
                 time = timer.ToString("HH:mm");
                 TimeLabelValue.Content = time;
+
+                var deltaTemp = targetTemp - insideTemp;
+
+                power = fuzzyLogic.GetPower(Math.Round(deltaTemp * 2, MidpointRounding.AwayFromZero) / 2);
+                PowerValue.Content = Math.Round(power).ToString() + "%";
+                HeatingPowerBar.Value = Math.Round(power);
+
                 await Task.Delay(speed);
                 timer = timer.AddMinutes(1);   
             }
             MessageBox.Show("Symulacja została zakończona", "Koniec symulacji");
+            WeatherBtn.IsEnabled = true;
         }
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)

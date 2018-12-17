@@ -14,7 +14,7 @@ namespace Tempo
         /// <summary>
         /// Gets power of heating system based on input
         /// </summary>
-        public double GetPower(int input)
+        public double GetPower(double input)
         {
             int Arraylength = 61;
 

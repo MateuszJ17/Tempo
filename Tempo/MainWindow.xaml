@@ -111,8 +111,8 @@
                     Orientation="Vertical"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
-                    Minimum="-15"
-                    Maximum="15"
+                    Minimum="15"
+                    Maximum="30"
                     TickFrequency="1"
                     IsSnapToTickEnabled="True"/>
         </Grid>
