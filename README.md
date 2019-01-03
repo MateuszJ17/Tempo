@@ -1,2 +1,2 @@
 # Tempo
-Temperature management system using neural network. This is an university project
+Temperature management system using fuzzy logic. This is an university project
