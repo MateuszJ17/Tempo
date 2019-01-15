@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,6 +29,8 @@ namespace Tempo
         FuzzyLogic fuzzyLogic = new FuzzyLogic();
 
         DateTime timer = new DateTime(2018, 1, 1, 0, 0, 0);
+        DateTime heatingTimer = new DateTime(2018, 1, 1, 0, 0, 0);
+        DateTime powerTimer = new DateTime(2018, 1, 1, 0, 0, 0);
 
         int speed = 1000;
         int targetTemp;
@@ -71,14 +74,34 @@ namespace Tempo
             var temperatures = temp.ParsedTemperatures;
             double initTemp = 21;
             insideTemp = initTemp;
-            var rand = new Random();
-            var loss = rand.NextDouble();
-
+            double change = 0;
+            double loss;
             while (time != "23:59")
             {
                 outsideTemp = temperatures[timer.Hour];
                 OutsideTemperatureLabelValue.Content = outsideTemp + "°C";
-
+                if (outsideTemp < 0)
+                {
+                    loss = 1.5;
+                }
+                if (outsideTemp >= 0 & outsideTemp <= 2)
+                {
+                    loss = 1.3;
+                }
+                if (outsideTemp > 2 && outsideTemp <= 3.5)
+                {
+                    loss = 1.2;
+                }
+                if (outsideTemp > 3.5 && outsideTemp <= 4.5)
+                {
+                    loss = 1.15;
+                }
+                if (outsideTemp > 4.5)
+                {
+                    loss = 1.1;
+                }
+                else
+                    loss = 1;
                 //if(insideTemp>15) insideTemp = Math.Round(insideTemp - (outsideTemp / 10), 2);
                 //InsideTemperatureLabelValue.Content = insideTemp + "°C";
 
@@ -92,17 +115,63 @@ namespace Tempo
                 //    insideTemp = Math.Round((insideTemp - outsideTemp) / 100, 2);
                 //    InsideTemperatureLabelValue.Content = insideTemp.ToString() + "°C";
                 //}
+                if (insideTemp < 30 && insideTemp > 15 && !(insideTemp == TemperatureSlider.Value || insideTemp == 30 || insideTemp == 15 || insideTemp > TemperatureSlider.Value))
+                {
+                    if (power > 60)
+                    {
+                        change = 50;
+                    }
+                    if (power > 40 && power < 60)
+                    {
+                        change = 30;
+                    }
+                    if (power > 20 && power < 40)
+                    {
+                        change = 15;
+                    }
+                    if (power > 0 && power < 20)
+                    {
+                        change = 5;
+                    }
+                }
+                if (insideTemp == TemperatureSlider.Value || insideTemp == 30 || insideTemp == 15)
+                {
+                    heatingTimer = heatingTimer.AddMinutes(1);
+                    change = 0;
+                    power = 0;
+                    while (powerTimer.Minute < 25)
+                    {
+                        power = 0;
+                        powerTimer = powerTimer.AddMinutes(1);
+                    }
+                    powerTimer = new DateTime(2018, 1, 1, 0, 0, 0);
 
-                if (insideTemp < 0 && insideTemp >= Math.Abs(0 - TemperatureSlider.Value))
-                {
-                    insideTemp = Math.Round(insideTemp - loss, 2);
-                    InsideTemperatureLabelValue.Content = insideTemp + "°C";
+                    if (heatingTimer.Minute >= 10)
+                    {
+                        change = -15;
+                        heatingTimer = new DateTime(2018, 1, 1, 0, 0, 0);
+                    }
                 }
-                else
+                if (insideTemp > TemperatureSlider.Value)
                 {
-                    insideTemp = Math.Round(insideTemp - loss, 2);
-                    InsideTemperatureLabelValue.Content = insideTemp + "°C";
+                    heatingTimer = heatingTimer.AddMinutes(1);
+                    change = 0;
+                    power = 0;
+                    while (powerTimer.Minute < 25)
+                    {
+                        power = 0;
+                        powerTimer = powerTimer.AddMinutes(1);
+                    }
+                    powerTimer = new DateTime(2018, 1, 1, 0, 0, 0);
+
+                    if (heatingTimer.Minute >= 10)
+                    {
+                        change = -15;
+                        heatingTimer = new DateTime(2018, 1, 1, 0, 0, 0);
+                    }
                 }
+                insideTemp = Math.Round(insideTemp + double.Parse((change * loss / 100).ToString()), 2);
+                InsideTemperatureLabelValue.Content = insideTemp.ToString();
 
                 time = timer.ToString("HH:mm");
                 TimeLabelValue.Content = time;
@@ -114,7 +183,8 @@ namespace Tempo
                 HeatingPowerBar.Value = Math.Round(power);
 
                 await Task.Delay(speed);
-                timer = timer.AddMinutes(1);   
+                timer = timer.AddMinutes(1);
+
             }
             MessageBox.Show("Symulacja została zakończona", "Koniec symulacji");
             WeatherBtn.IsEnabled = true;
