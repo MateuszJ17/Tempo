@@ -28,6 +28,7 @@
                 Grid.Row="0"
                 Content="Opcje"
                 FontSize="24"
+                Margin="22"
                 Click="OptionsButton_Click"/>
 
         <Button x:Name="WeatherBtn"

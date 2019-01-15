@@ -21,6 +21,8 @@ namespace Tempo
     {
         public string InputMode { get; set; }
         public int Interval { get; set; }
+        public double Loss { get; set; }
+        public bool IsActivated { get; set; } = false;
 
         public OptionsWindow()
         {
@@ -28,8 +30,6 @@ namespace Tempo
             AutoInput.IsChecked = true;
             CheckMode();
         }
-
-        // TODO: Add check event
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -53,6 +53,8 @@ namespace Tempo
                 IntervalLength.IsEnabled = false;
             #endregion
 
+
+            IsActivated = false;
             this.Hide();
         }
 
@@ -61,10 +63,12 @@ namespace Tempo
             if (ManualInput.IsChecked == true)
             {
                 InputMode = "Manual";
+                AutoInput.IsChecked = false;
             }
             else
             {
                 InputMode = "Auto";
+                ManualInput.IsChecked = false;
             }
         }
     }

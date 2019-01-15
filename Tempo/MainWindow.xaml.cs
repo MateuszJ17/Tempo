@@ -34,6 +34,7 @@ namespace Tempo
         double insideTemp;
         double outsideTemp;
         double power;
+        //double loss;
 
         public MainWindow()
         {
@@ -70,14 +71,38 @@ namespace Tempo
             var temperatures = temp.ParsedTemperatures;
             double initTemp = 21;
             insideTemp = initTemp;
+            var rand = new Random();
+            var loss = rand.NextDouble();
 
             while (time != "23:59")
             {
                 outsideTemp = temperatures[timer.Hour];
                 OutsideTemperatureLabelValue.Content = outsideTemp + "°C";
 
-                if(insideTemp>15) insideTemp = Math.Round(insideTemp - (outsideTemp / 10), 2);
-                InsideTemperatureLabelValue.Content = insideTemp + "°C";
+                //if(insideTemp>15) insideTemp = Math.Round(insideTemp - (outsideTemp / 10), 2);
+                //InsideTemperatureLabelValue.Content = insideTemp + "°C";
+
+                //if (insideTemp > 0)
+                //{
+                //    insideTemp = Math.Round(((insideTemp - outsideTemp) / 100) * loss, 2);
+                //    InsideTemperatureLabelValue.Content = insideTemp + "°C";
+                //}
+                //else
+                //{
+                //    insideTemp = Math.Round((insideTemp - outsideTemp) / 100, 2);
+                //    InsideTemperatureLabelValue.Content = insideTemp.ToString() + "°C";
+                //}
+
+                if (insideTemp < 0 && insideTemp >= Math.Abs(0 - TemperatureSlider.Value))
+                {
+                    insideTemp = Math.Round(insideTemp - loss, 2);
+                    InsideTemperatureLabelValue.Content = insideTemp + "°C";
+                }
+                else
+                {
+                    insideTemp = Math.Round(insideTemp - loss, 2);
+                    InsideTemperatureLabelValue.Content = insideTemp + "°C";
+                }
 
                 time = timer.ToString("HH:mm");
                 TimeLabelValue.Content = time;
@@ -98,8 +123,11 @@ namespace Tempo
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             OptionsWindow optionsWindow = new OptionsWindow();
+            optionsWindow.IsActivated = true;
+
             optionsWindow.ShowDialog();
-            if (!optionsWindow.IsVisible)
+
+            if (!optionsWindow.IsVisible && optionsWindow.IsActivated == true)
             {
                 optionsWindow.Show();
                 optionsWindow.Activate();
